@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Textual Content Moderator</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #333;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 40px;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(10px);
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 40px;
+            color: #4a5568;
+            font-size: 2.5rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        h2 {
+            margin-top: 40px;
+            margin-bottom: 20px;
+            color: #2d3748;
+            font-size: 1.5rem;
+            font-weight: 600;
+        }
+
+        .form-section {
+            background: #f8fafc;
+            padding: 30px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+            border: 1px solid #e2e8f0;
+        }
+
+        label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 10px;
+            color: #4a5568;
+            font-size: 1.1rem;
+        }
+
+        textarea {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #e2e8f0;
+            border-radius: 10px;
+            font-size: 16px;
+            font-family: inherit;
+            resize: vertical;
+            transition: all 0.3s ease;
+            background: #fff;
+        }
+
+        textarea:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        button {
+            padding: 15px 30px;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: #fff;
+            font-size: 16px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            margin-top: 15px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
+        }
+
+        button:active {
+            transform: translateY(0);
+        }
+
+        button:disabled {
+            opacity: 0.7;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        /* Loading Spinner Styles */
+        .loading-spinner {
+            display: none;
+            text-align: center;
+            padding: 40px;
+        }
+
+        .spinner {
+            width: 50px;
+            height: 50px;
+            border: 4px solid #e2e8f0;
+            border-top: 4px solid #667eea;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 20px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .loading-text {
+            color: #667eea;
+            font-size: 18px;
+            font-weight: 600;
+        }
+
+        #result {
+            padding: 30px;
+            background: linear-gradient(135deg, #f8fafc, #e2e8f0);
+            border: none;
+            border-radius: 15px;
+            margin-top: 30px;
+            display: none;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
+        }
+
+        .result-header {
+            color: #2d3748;
+            font-size: 1.4rem;
+            font-weight: 700;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .result-item {
+            margin-bottom: 15px;
+            padding: 15px;
+            background: #fff;
+            border-radius: 10px;
+            border-left: 4px solid #667eea;
+        }
+
+        .result-item strong {
+            color: #4a5568;
+            font-weight: 600;
+        }
+
+        .bar-container {
+            width: 100%;
+            height: 25px;
+            background-color: #e2e8f0;
+            border-radius: 12px;
+            overflow: hidden;
+            margin: 15px 0;
+            box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .bar {
+            height: 100%;
+            transition: width 0.8s ease-in-out;
+            border-radius: 12px;
+        }
+
+        .probabilities-list {
+            list-style-type: none;
+            padding: 0;
+            margin: 15px 0;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+
+        .probabilities-list li {
+            background: #fff;
+            padding: 15px;
+            border-radius: 10px;
+            text-align: center;
+            font-weight: 600;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        }
+
+        .appropriate {
+            border-left: 4px solid #48bb78;
+            color: #2f855a;
+        }
+
+        .inappropriate {
+            border-left: 4px solid #f56565;
+            color: #c53030;
+        }
+
+        .text-preview {
+            background: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            border: 1px solid #e2e8f0;
+            margin: 15px 0;
+            font-style: italic;
+            color: #4a5568;
+            line-height: 1.6;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px;
+                margin: 10px;
+            }
+            
+            h1 {
+                font-size: 2rem;
+            }
+            
+            .probabilities-list {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🛡️ Text Content Moderator</h1>
+        
+        <div class="form-section">
+            <h2>📝 Text Analysis</h2>
+            <form id="text-form" method="post">
+                <div>
+                    <label for="text-input">Enter text to analyze:</label>
+                    <textarea id="text-input" name="text" rows="6" placeholder="Type or paste your text here for content moderation analysis..."></textarea>
+                </div>
+                <button type="submit" id="submit-btn">
+                    <span class="btn-text">Analyze Content</span>
+                </button>
+            </form>
+        </div>
+
+        <!-- Loading Spinner -->
+        <div id="loading" class="loading-spinner">
+            <div class="spinner"></div>
+            <div class="loading-text">Analyzing content...</div>
+        </div>
+
+        <!-- Results Section -->
+        <div id="result"></div>
+    </div>
+
+    <script>
+        document.getElementById("text-form").addEventListener("submit", function(event) {
+            event.preventDefault();
+            
+            // Show loading spinner and hide result
+            document.getElementById("loading").style.display = "block";
+            document.getElementById("result").style.display = "none";
+            
+            // Disable submit button
+            const submitBtn = document.getElementById("submit-btn");
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = '<span class="btn-text">Analyzing...</span>';
+            
+            var formData = new FormData(this);
+            fetch("/", {
+                method: "POST",
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                // Hide loading spinner
+                document.getElementById("loading").style.display = "none";
+                
+                // Show result with enhanced styling
+                const resultDiv = document.getElementById("result");
+                resultDiv.style.display = "block";
+                
+                // Determine the gradient colors based on prediction
+                const isAppropriate = data.predicted_class === "Appropriate";
+                const appropriatePercentage = (data.probabilities.appropriate * 100).toFixed(1);
+                const inappropriatePercentage = (data.probabilities.inappropriate * 100).toFixed(1);
+                
+                resultDiv.innerHTML = `
+                    <div class="result-header">📊 Analysis Results</div>
+                    
+                    <div class="result-item">
+                        <strong>📄 Analyzed Text:</strong>
+                        <div class="text-preview">"${data.text}"</div>
+                    </div>
+                    
+                    <div class="result-item">
+                        <strong>🎯 Classification:</strong> 
+                        <span style="color: ${isAppropriate ? '#2f855a' : '#c53030'}; font-weight: bold; font-size: 1.1em;">
+                            ${data.predicted_class}
+                        </span>
+                    </div>
+                    
+                    <div class="result-item">
+                        <strong>📈 Confidence Distribution:</strong>
+                        <div class="bar-container">
+                            <div class="bar" style="width: 100%; background: linear-gradient(to right, #48bb78 0%, #48bb78 ${appropriatePercentage}%, #f56565 ${appropriatePercentage}%, #f56565 100%);"></div>
+                        </div>
+                        
+                        <ul class="probabilities-list">
+                            <li class="appropriate">
+                                ✅ Appropriate<br>
+                                <strong>${appropriatePercentage}%</strong>
+                            </li>
+                            <li class="inappropriate">
+                                ⚠️ Inappropriate<br>
+                                <strong>${inappropriatePercentage}%</strong>
+                            </li>
+                        </ul>
+                    </div>
+                `;
+                
+                // Re-enable submit button
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = '<span class="btn-text">Analyze Content</span>';
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                
+                // Hide loading spinner and show error
+                document.getElementById("loading").style.display = "none";
+                document.getElementById("result").style.display = "block";
+                document.getElementById("result").innerHTML = `
+                    <div class="result-header" style="color: #c53030;">❌ Error</div>
+                    <div class="result-item">
+                        <strong>An error occurred while analyzing the content. Please try again.</strong>
+                    </div>
+                `;
+                
+                // Re-enable submit button
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = '<span class="btn-text">Analyze Content</span>';
+            });
+        });
+    </script>
+</body>
+</html>

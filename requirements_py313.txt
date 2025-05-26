@@ -1,0 +1,47 @@
+# Python 3.13 Compatible Requirements
+# Core web framework
+Flask>=3.0.0
+Werkzeug>=3.0.0
+
+# Scientific computing
+numpy>=2.1.0
+matplotlib>=3.9.0
+opencv-python>=4.10.0
+
+# Machine Learning
+torch>=2.4.0
+transformers>=4.44.0
+huggingface-hub>=0.24.0
+tokenizers>=0.19.0
+safetensors>=0.4.0
+
+# NLP
+nltk>=3.8.0
+regex>=2023.12.0
+
+# Google Cloud (updated versions)
+# google-cloud-vision>=3.8.0
+# google-api-python-client>=2.140.0
+# google-auth>=2.34.0
+# google-auth-httplib2>=0.2.0
+
+# Image processing
+Pillow>=10.4.0
+pytesseract>=0.3.10
+
+# Utilities
+requests>=2.32.0
+PyYAML>=6.0.0
+tqdm>=4.66.0
+click>=8.1.0
+packaging>=24.0
+
+# Web server
+gunicorn>=22.0.0
+
+# Other utilities
+filelock>=3.15.0
+fsspec>=2024.6.0
+joblib>=1.4.0
+python-dateutil>=2.9.0
+six>=1.16.0 
