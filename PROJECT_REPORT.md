@@ -289,32 +289,6 @@ The system provides a simple API endpoint:
 }
 ```
 
-### Production Considerations
-- **Scalability**: Consider using Gunicorn for production deployment
-- **Security**: Implement rate limiting and input validation
-- **Monitoring**: Add logging and performance metrics
-- **Caching**: Implement result caching for repeated queries
-
-## Future Enhancements
-
-### Technical Improvements
-1. **Multi-class Classification**: Extend to more granular content categories
-2. **Multilingual Support**: Add support for multiple languages
-3. **Real-time Learning**: Implement online learning capabilities
-4. **Ensemble Methods**: Combine multiple models for improved accuracy
-
-### Feature Additions
-1. **Batch Processing**: Support for analyzing multiple texts simultaneously
-2. **API Authentication**: Secure API access with authentication
-3. **Analytics Dashboard**: Comprehensive reporting and analytics
-4. **Custom Training**: Allow users to fine-tune models on custom datasets
-
-### Infrastructure Enhancements
-1. **Containerization**: Docker deployment for easier scaling
-2. **Cloud Integration**: AWS/GCP deployment options
-3. **Database Integration**: Store analysis history and user feedback
-4. **Microservices**: Split into separate services for better scalability
-
 ## Conclusion
 
 The Text Content Moderator project successfully demonstrates the application of advanced NLP techniques to solve real-world content moderation challenges. The system achieves excellent performance with 95.66% accuracy while providing a user-friendly interface for practical deployment.
@@ -332,18 +306,16 @@ The system addresses critical needs in digital content management, providing aut
 - Businesses maintaining professional communication standards
 - Community platforms fostering positive user interactions
 
-### Technical Excellence
-The project demonstrates proficiency in:
-- **Deep Learning**: Advanced transformer model fine-tuning
-- **Web Development**: Modern full-stack application development
-- **Software Engineering**: Clean, maintainable, and scalable code architecture
-- **Data Science**: Comprehensive data preprocessing and model evaluation
 
-This text content moderator represents a significant step toward automated, intelligent content management systems that can enhance online safety and user experience across various digital platforms.
+## Project Developers
 
----
+| Name | Student ID |
+|------|------------|
+| Dagmawi Tensay | UGR/0443/13 |
+| Deribew Shimels | UGR/5307/13 |
+| Ephrem Shimels | UGR/8099/13 |
+| Fasika Fikadu | UGR/9597/13 |
 
-**Project Developed By**: [Your Name]
-**Date**: [Current Date]
+**Date**: 5/26/2025
 **Technology Stack**: Python, PyTorch, Transformers, Flask, BERT
 **Performance**: 95.66% Accuracy, 97.41% F1-Score 
