@@ -87,8 +87,6 @@ source venv/bin/activate
 pip install -r requirements_py313.txt
 ```
 
-> `main.py` still has the line `from google.cloud import vision`, but that package is commented out in the requirements. Either install it (`pip install google-cloud-vision`) or comment out that import. If you do neither, the app fails at startup with an `ImportError`.
-
 **3. Add the trained model**
 
 The weights are too large for git, so `App/bert_model/` is in `.gitignore`. To create it, run [BERT_final.ipynb](BERT_final.ipynb) (for example on Kaggle), download `/kaggle/working/bert_model/`, and place it at `App/bert_model/`:
